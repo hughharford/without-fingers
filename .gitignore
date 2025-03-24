@@ -5,3 +5,4 @@ database
 secrets
 .env
 .envrc
+node_modules
