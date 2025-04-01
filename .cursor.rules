@@ -1,0 +1,176 @@
+{
+  "language": "python",
+  "package_manager": "poetry",
+  "test_framework": {
+    "name": "pytest",
+    "plugins": ["pytest-bdd", "pytest-asyncio"],
+    "bdd_features_location": "tests/features/",
+    "fixture_rules": {
+      "require_fixture_typing": true,
+      "require_fixture_docstring": true,
+      "fixture_scope_required": true
+    }
+  },
+  "development_rules": {
+    "require_tests": true,
+    "test_first": true,
+    "max_file_changes_per_commit": 1,
+    "require_docstrings": true,
+    "require_type_hints": true,
+    "always_use_type_hints": true,
+    "strict_type_checking": true,
+    "max_file_lines": 300,
+    "pep_compliance": "latest"
+  },
+  "test_rules": {
+    "test_location": "tests/",
+    "test_file_pattern": "test_*.py",
+    "require_test_coverage": true,
+    "min_coverage": 90
+  },
+  "style_rules": {
+    "line_length": 88,
+    "use_black": true,
+    "use_isort": true,
+    "use_mypy": true,
+    "use_ruff": true
+  },
+  "documentation_rules": {
+    "require_readme": true,
+    "require_docstrings": true,
+    "docstring_style": "google"
+  },
+  "architecture_rules": {
+    "frontend": {
+      "framework": "electron",
+      "primary_language": "python",
+      "js_allowed_for": ["electron-specific-code", "ui-rendering"]
+    },
+    "backend": {
+      "containerization": {
+        "use_docker": true,
+        "services": {
+          "voice_recognition": {
+            "type": "low_latency",
+            "max_response_time_ms": 200
+          }
+        }
+      }
+    }
+  },
+  "initialization_rules": {
+    "require_prerequisites": true,
+    "prerequisites_checklist": [
+      "README.md must exist before poetry init",
+      "pyproject.toml must be created via poetry init",
+      "git must be initialized",
+      "virtual environment must be active"
+    ],
+    "package_installation_order": [
+      "poetry install base dependencies",
+      "poetry install dev dependencies",
+      "npm install electron dependencies"
+    ]
+  },
+  "quality_control_rules": {
+    "code_review": {
+      "check_for_duplicates": true,
+      "verify_imports_used": true,
+      "verify_variable_usage": true
+    },
+    "response_quality": {
+      "no_redundant_commands": true,
+      "verify_code_completeness": true,
+      "check_suggestions_for_duplicates": true
+    }
+  },
+  "virtual_environment_rules": {
+    "require_virtual_env": true,
+    "env_handling": {
+      "electron_python_integration": {
+        "use_absolute_paths": true,
+        "verify_interpreter_path": true,
+        "test_stages": ["basic_window", "python_integration"]
+      }
+    },
+    "path_resolution": {
+      "development": "${VIRTUAL_ENV}/bin/python",
+      "test": "${VIRTUAL_ENV}/bin/python",
+      "production": "system_python_with_dependencies"
+    }
+  },
+  "platform_rules": {
+    "os_specific": {
+      "linux": {
+        "display_requirements": {
+          "require_display": true,
+          "xvfb_for_tests": true,
+          "system_packages": [
+            {
+              "name": "xvfb",
+              "package": "xvfb",
+              "install_command": "sudo apt-get install xvfb",
+              "verify_command": "which Xvfb"
+            }
+          ]
+        },
+        "electron_setup": {
+          "sandbox_configuration": {
+            "required_commands": [
+              "sudo chown root:root node_modules/electron/dist/chrome-sandbox",
+              "sudo chmod 4755 node_modules/electron/dist/chrome-sandbox"
+            ],
+            "verify_after_npm_install": true,
+            "error_message": "Electron sandbox permissions must be configured for Linux"
+          }
+        }
+      },
+      "darwin": {
+        "display_requirements": {
+          "require_security_permissions": true
+        }
+      },
+      "win32": {
+        "display_requirements": {
+          "require_window_station": true
+        }
+      }
+    }
+  },
+  "context_rules": {
+    "check_all_cursor_windows": true,
+    "terminal_output": {
+      "always_check_cursor_terminal": true,
+      "parse_error_messages": true,
+      "check_command_history": true
+    },
+    "file_changes": {
+      "watch_cursor_editor_changes": true,
+      "track_unsaved_changes": true
+    }
+  },
+  "consistency_rules": {
+    "cross_file_updates": {
+      "require_consistent_naming": true,
+      "check_all_references": true,
+      "verify_changes": {
+        "check_feature_files": true,
+        "check_step_definitions": true,
+        "check_implementation_files": true,
+        "string_literals_must_match": true
+      }
+    },
+    "bdd_specific": {
+      "feature_step_matching": {
+        "exact_text_match_required": true,
+        "verify_step_definitions": true,
+        "check_quotation_format": true
+      }
+    },
+    "change_verification": {
+      "check_related_files": true,
+      "verify_dependencies": true,
+      "test_after_changes": true
+    }
+  }
+} 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Without Fingers</title>
+</head>
+<body>
+    <div id="python-output"></div>
+    <div id="docker-output"></div>
+    <script>
+        const { ipcRenderer } = require('electron');
+        
+        ipcRenderer.on('python-message', (event, message) => {
+            document.getElementById('python-output').textContent = message;
+        });
+        
+        ipcRenderer.on('docker-message', (event, message) => {
+            document.getElementById('docker-output').textContent = message;
+        });
+    </script>
+</body>
+</html> 
